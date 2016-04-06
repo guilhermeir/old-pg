@@ -1,0 +1,29 @@
+{
+  "name": "pg",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guilhermeiecker/pg.git"
+  },
+  "keywords": [
+    "tweeter",
+    "sentiment",
+    "api"
+  ],
+  "author": "Guilherme Iecker Ricardo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guilhermeiecker/pg/issues"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "ntwitter": "^0.5.0",
+    "sentiment": "^1.0.6",
+    "twitter": "^1.2.5"
+  }
+}
