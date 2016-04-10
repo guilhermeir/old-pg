@@ -1,5 +1,4 @@
 var twitter = require('ntwitter');
-var util = require('util');
 
 const L = 45000;
 const N = 900000;
