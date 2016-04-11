@@ -22,7 +22,7 @@ mainController.index = function(req, res, next){
       client.verifyCredentials(function(error, data){
         if(error){
           console.log("AUTHENTICATION ERROR: ", error);
-          res.status(500).send("Authentication problem!");
+          //return res.status(500).send("Authentication problem!");
         } else {
           client.stream('statuses/filter', {'track': 'trump'}, function(stream){
             console.log("MONITORING TWITTER FOR 'TRUMP'...");
@@ -30,17 +30,17 @@ mainController.index = function(req, res, next){
 
             stream.on('data', function(data){
               control = control + 1;
-              rs.push("TWIT # " + control + ": " + data.text);
+              rs.push("TWIT # " + control + ": " + data.text + "\n");
             });
             stream.on('error', function(msg, code){
               console.log("ERROR ", code, ": ", msg );
               control = 0;
-              res.status(500).send("Error: " + msg);
+              return res.status(500).send("Error: " + msg);
             });
             stream.on('destroy', function(response){
-              res.status(400).send("You have reached your rate limit");
               console.log("YOU REACH YOUT RATE LIMIT: ", response);
               control = 0;
+              return res.status(400).send("You have reached your rate limit");
             });
 
             if(control<L){
@@ -54,7 +54,7 @@ mainController.index = function(req, res, next){
     rs.pipe(process.stdout).pipe(res);
   } else {
     console.log("FAILED: CONNECTION ATTEMPT WITH NO PHRASE.");
-    res.status(404).send("You must set a phrase!");
+    return res.status(404).send("You must set a phrase!");
   }
 }
 // mainController.index = function(req, res, next) {
