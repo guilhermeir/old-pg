@@ -1,5 +1,5 @@
 var twitter = require('ntwitter');
-var readable = require('stream').Readable;
+//var readable = require('stream').Readable;
 
 var testController = {}
 var client = new twitter({
@@ -10,38 +10,41 @@ var client = new twitter({
 });
 
 testController.index = function(req, res, next) {
-  var rs = readable();
+  //var rs = readable();
+
   var phrase = req.query.phrase;
   var control = 0;
 
   if(phrase){
-    rs._read = function(){
-      client.verifyCredentials(function(error, data){
-        if(error){
-          rs.push("AUTH ERROR: " + error + "\n");
-        }
-        client.stream('statuses/filter', {'track': phrase}, function(stream){
-          rs.push("MONITORING TWITTER FOR '"+phrase+"'...\n");
+    client.verifyCredentials(function(error, data){
+      if(error){
+        console.log("AUTH ERROR: " + error + "\n");
+      }
+      client.stream('statuses/filter', {'track': phrase}, function(stream){
+        console.log("MONITORING TWITTER FOR '"+phrase+"'...\n");
 
-          stream.on('data', function(data){
-            control = control + 1;
-            rs.push("TWIT # " + control + ": " + data.text + "\n");
-          });
-          stream.on('error', function(msg, code){
-            control = control + 1;
-            rs.push("ERROR #" + control + ": " + error + "\n");
-            control = 0;
-            stream.destroy;
-          });
-          stream.on('destroy', function(response){
-            rs.push("EOF: ", response);
-            control = 0;
-          });
+        stream.on('data', function(data){
+          control = control + 1;
+          //rs._read = function(){
+          //  rs.push("TWIT # " + control + ": " + data.text + "\n");
+          //};
         });
-      });
-    };
 
-    rs.pipe(process.stdout).pipe(res);
+        stream.on('error', function(msg, code){
+          control = control + 1;
+          console.log("ERROR #" + control + ": " + error + "\n");
+          control = 0;
+          stream.destroy;
+        });
+
+        stream.on('destroy', function(response){
+          console.log("EOF: ", response);
+          control = 0;
+        });
+
+        rs.pipe(process.stdout).pipe(res);
+      });
+    });
   } else {
     res.status(404).send("You need to set a phrase!");
   }

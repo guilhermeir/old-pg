@@ -8,6 +8,7 @@ var port = 3000;
 
 var app = express();
 
+app.get('/', index);
 app.get('/sent', mainController.index);
 app.get('/file', fileController.index);
 app.get('/test', testController.index);
