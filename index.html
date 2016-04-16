@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['geochart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      var map = {
+        'ac': 0, 'al': 0, 'ap': 0, 'am': 0, 'ba': 0,
+        'ce': 0, 'df': 0, 'es': 0, 'go': 0, 'ma': 0,
+        'mt': 0, 'ms': 0, 'mg': 0, 'pa': 0, 'pb': 0,
+        'pr': 0, 'pe': 0, 'pi': 0, 'rj': 0, 'rn': 0,
+        'rs': 0, 'ro': 0, 'ra': 0, 'sp': 0, 'sc': 0,
+        'se': 0, 'to': 0
+      }
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['State', 'Region'],
+          ['Acre', map.ac],               ['Alagoas', map.al],            ['Amapa', map.ap],          ['Amazonas', map.am],       ['Bahia', map.ba],
+          ['Ceara', map.ce],              ['Distrito Federal', map.df],   ['Espirito Santo', map.es], ['Goias', map.go],          ['Maranhao', map.ma],
+          ['Mato Grosso', map.mt],        ['Mato Grosso do Sul', map.ms], ['Minas Gerais', map.mg],   ['Para', map.pa],           ['Paraiba', map.pb],
+          ['Parana', map.pr],             ['Pernambuco', map.pe],         ['Piaui', map.pi],          ['Rio de Janeiro', map.rj], ['Rio Grande do Norte', map.rn],
+          ['Rio Grande do Sul', map.rs],  ['Rondonia', map.ro],           ['Roraima', map.ra],        ['Sao Paulo', map.sp],      ['Santa Catarina', map.sc],
+          ['Sergipe', map.se],            ['Tocantins', map.to]
+        ]);
+
+        var options = {
+          region: 'BR',
+          resolution: 'provinces',
+          colorAxis: {colors: ['red', 'green']},
+          backgroundColor: 'white',
+          datalessRegionColor: 'white',
+          defaultColor: '#f5f5f5',
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(data, options);
+      };
+    </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+    </style>
+  </head>
+  <script src="/socket.io/socket.io.js"></script>
+  <body>
+    <div id="geochart-colors" style="width: 700px; height: 433px;"></div>
+    <form action="">
+      <input id="phrase" type="search" placeholder="Enter your search string here..." />
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+
+      $('form').submit(function(){
+        socket.emit('set phrase', $('#phrase').val());
+        $('#phrase').val('');
+        return false;
+      });
+
+      socket.on('increment', function(msg){
+        map[msg]++;
+        drawChart();
+      });
+    </script>
+
+  </body>
+</html>

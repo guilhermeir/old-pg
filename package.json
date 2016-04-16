@@ -21,9 +21,11 @@
     "url": "https://github.com/guilhermeiecker/pg/issues"
   },
   "dependencies": {
+    "bootstrap": "^3.3.6",
     "express": "^4.13.4",
     "ntwitter": "^0.5.0",
     "sentiment": "^1.0.6",
+    "socket.io": "^1.4.5",
     "twitter": "^1.2.5"
   }
 }
