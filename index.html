@@ -66,8 +66,8 @@
         return false;
       });
 
-      socket.on('increment', function(msg){
-        map[msg]++;
+      socket.on('set state', function(state){
+        map[state]++;
         drawChart();
       });
     </script>
